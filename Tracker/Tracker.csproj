@@ -84,5 +84,8 @@
       <Version>2.1.66</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sql\CreateDatabaseIfRequired.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
