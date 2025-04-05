@@ -8,7 +8,7 @@ namespace Tracker
     public partial class MainForm : Form
     {
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private readonly DataStorage storage = new DataStorage(@"Server=(localdb)\MSSQLLocalDB;Integrated Security=true;");
+        private readonly DataStorage storage = new DataStorage(@"Server=(localdb)\MSSQLLocalDB;Database=TrackerDataStorage;Integrated Security=true;");
 
         private volatile bool loading;
 

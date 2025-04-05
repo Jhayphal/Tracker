@@ -21,8 +21,11 @@ BEGIN
         , [Comment] NVARCHAR(2048) NULL
     )
 
-    INSERT INTO [dbo].[Records] ([CreatedAt], [Description], [Total])
-    VALUES (GETDATE(), 'Some important operation', 123.44)
+    INSERT INTO [dbo].[Records] ([CreatedAt], [Description], [Total], [Comment])
+    VALUES
+          ('2012-12-21T15:14:13', 'Some important operation', 123.44, NULL)
+        , ('2012-12-21T16:17:18', 'Some important operation x 10 Some important operation Some important operation Some important operation Some important operation Some important operation Some important operation Some important operation Some important operation', 0, 'Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment Comment ')
+        , ('2015-01-09T11:05:00', 'operation Some important operation operation Some important operation Some important operation', 123456789.1234, 'Comment Comment Comment Comment Comment Comment ')
 END
 GO
 

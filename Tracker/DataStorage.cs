@@ -28,23 +28,32 @@ namespace Tracker
             {
                 await connection.OpenAsync(token);
 
-                var reader = await GetLoadCommand(connection).ExecuteReaderAsync(token);
-
-                while (await reader.ReadAsync(token))
+                using (var cmd = connection.CreateCommand())
                 {
-                    var columnIndex = 0;
-                    var record = new Record
+                    cmd.CommandText = "SELECT COUNT(*) FROM [dbo].[Records]";
+                    cmd.CommandType = CommandType.Text;
+
+                    var result = await cmd.ExecuteScalarAsync();
+                }
+
+                using (var reader = await GetLoadCommand(connection).ExecuteReaderAsync(token))
+                {
+                    while (await reader.ReadAsync(token))
                     {
-                        Id = reader.GetInt64(columnIndex++),
-                        CreatedAt = reader.GetDateTime(columnIndex++),
-                        Description = reader.GetString(columnIndex++),
-                        Total = reader.GetDecimal(columnIndex++),
-                        Comment = SafeGetSqlString(reader, columnIndex++)
-                    };
+                        var columnIndex = 0;
+                        var record = new Record
+                        {
+                            Id = reader.GetInt64(columnIndex++),
+                            CreatedAt = reader.GetDateTime(columnIndex++),
+                            Description = reader.GetString(columnIndex++),
+                            Total = reader.GetDecimal(columnIndex++),
+                            Comment = SafeGetSqlString(reader, columnIndex++)
+                        };
 
-                    rows.Add(record);
+                        rows.Add(record);
 
-                    await Task.Delay(TimeSpan.FromSeconds(1), token);
+                        //await Task.Delay(TimeSpan.FromSeconds(1), token);
+                    }
                 }
             }
 
