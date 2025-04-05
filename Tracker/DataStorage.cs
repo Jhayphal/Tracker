@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Tracker
@@ -17,14 +18,19 @@ namespace Tracker
             this.connectionString = connectionString;
         }
 
-        public async Task<IEnumerable<Record>> GetRecordsAsync()
+        public async Task<IEnumerable<Record>> GetRecordsAsync(CancellationToken cancellation)
         {
+            cancellation.ThrowIfCancellationRequested();
+
             var rows = new List<Record>();
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
                 await Task.Delay(TimeSpan.FromSeconds(5));
+
+                cancellation.ThrowIfCancellationRequested();
 
                 var reader = await GetLoadCommand(connection).ExecuteReaderAsync();
 
@@ -41,6 +47,8 @@ namespace Tracker
                     };
 
                     rows.Add(record);
+
+                    cancellation.ThrowIfCancellationRequested();
                 }
             }
 
