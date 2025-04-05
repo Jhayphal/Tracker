@@ -28,8 +28,6 @@ namespace Tracker
             {
                 await connection.OpenAsync(token);
 
-                await Task.Delay(TimeSpan.FromSeconds(5), token);
-
                 var reader = await GetLoadCommand(connection).ExecuteReaderAsync(token);
 
                 while (await reader.ReadAsync(token))
@@ -45,6 +43,8 @@ namespace Tracker
                     };
 
                     rows.Add(record);
+
+                    await Task.Delay(TimeSpan.FromSeconds(1), token);
                 }
             }
 

@@ -28,11 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpContent = new System.Windows.Forms.TableLayoutPanel();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.dgvRecords = new System.Windows.Forms.DataGridView();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CreatedAt = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Total = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -99,8 +103,11 @@
             this.dgvRecords.AllowUserToAddRows = false;
             this.dgvRecords.AllowUserToDeleteRows = false;
             this.dgvRecords.AllowUserToOrderColumns = true;
+            this.dgvRecords.AllowUserToResizeRows = false;
+            this.dgvRecords.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dgvRecords.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvRecords.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Id,
             this.CreatedAt,
             this.Description,
             this.Total,
@@ -110,36 +117,52 @@
             this.dgvRecords.Margin = new System.Windows.Forms.Padding(6);
             this.dgvRecords.Name = "dgvRecords";
             this.dgvRecords.ReadOnly = true;
+            this.dgvRecords.RowHeadersVisible = false;
             this.dgvRecords.RowHeadersWidth = 92;
             this.tlpContent.SetRowSpan(this.dgvRecords, 3);
             this.dgvRecords.RowTemplate.Height = 24;
+            this.dgvRecords.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRecords.Size = new System.Drawing.Size(2318, 1260);
             this.dgvRecords.TabIndex = 3;
             // 
+            // Id
+            // 
+            this.Id.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "Id";
+            this.Id.MinimumWidth = 12;
+            this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
+            this.Id.Visible = false;
+            this.Id.Width = 250;
+            // 
             // CreatedAt
             // 
-            this.CreatedAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.CreatedAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.CreatedAt.DataPropertyName = "CreatedAt";
             this.CreatedAt.HeaderText = "Created At";
             this.CreatedAt.MinimumWidth = 12;
             this.CreatedAt.Name = "CreatedAt";
             this.CreatedAt.ReadOnly = true;
-            this.CreatedAt.Width = 203;
+            this.CreatedAt.Width = 250;
             // 
             // Description
             // 
-            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Description.DataPropertyName = "Description";
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Description.DefaultCellStyle = dataGridViewCellStyle1;
             this.Description.HeaderText = "Description";
             this.Description.MinimumWidth = 12;
             this.Description.Name = "Description";
             this.Description.ReadOnly = true;
-            this.Description.Width = 211;
             // 
             // Total
             // 
-            this.Total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Total.DataPropertyName = "Total";
+            dataGridViewCellStyle2.Format = "# #,##";
+            this.Total.DefaultCellStyle = dataGridViewCellStyle2;
             this.Total.HeaderText = "Total";
             this.Total.MinimumWidth = 12;
             this.Total.Name = "Total";
@@ -148,13 +171,14 @@
             // 
             // Comment
             // 
-            this.Comment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.Comment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Comment.DataPropertyName = "Comment";
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Comment.DefaultCellStyle = dataGridViewCellStyle3;
             this.Comment.HeaderText = "Comment";
             this.Comment.MinimumWidth = 12;
             this.Comment.Name = "Comment";
             this.Comment.ReadOnly = true;
-            this.Comment.Width = 190;
             // 
             // MainForm
             // 
@@ -184,6 +208,7 @@
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.DataGridView dgvRecords;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn CreatedAt;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewTextBoxColumn Total;
