@@ -31,6 +31,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpContent = new System.Windows.Forms.TableLayoutPanel();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
@@ -140,18 +141,23 @@
             // 
             this.CreatedAt.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.CreatedAt.DataPropertyName = "CreatedAt";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+            dataGridViewCellStyle1.Format = "dd.MM.yyyy HH:mm:ss";
+            dataGridViewCellStyle1.NullValue = null;
+            this.CreatedAt.DefaultCellStyle = dataGridViewCellStyle1;
             this.CreatedAt.HeaderText = "Created At";
             this.CreatedAt.MinimumWidth = 12;
             this.CreatedAt.Name = "CreatedAt";
             this.CreatedAt.ReadOnly = true;
-            this.CreatedAt.Width = 250;
+            this.CreatedAt.Width = 300;
             // 
             // Description
             // 
             this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Description.DataPropertyName = "Description";
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Description.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Description.DefaultCellStyle = dataGridViewCellStyle2;
             this.Description.HeaderText = "Description";
             this.Description.MinimumWidth = 12;
             this.Description.Name = "Description";
@@ -161,20 +167,23 @@
             // 
             this.Total.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Total.DataPropertyName = "Total";
-            dataGridViewCellStyle2.Format = "# #,##";
-            this.Total.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
+            dataGridViewCellStyle3.Format = "#,#.##";
+            dataGridViewCellStyle3.NullValue = null;
+            this.Total.DefaultCellStyle = dataGridViewCellStyle3;
             this.Total.HeaderText = "Total";
             this.Total.MinimumWidth = 12;
             this.Total.Name = "Total";
             this.Total.ReadOnly = true;
-            this.Total.Width = 132;
+            this.Total.Width = 220;
             // 
             // Comment
             // 
             this.Comment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Comment.DataPropertyName = "Comment";
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Comment.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Comment.DefaultCellStyle = dataGridViewCellStyle4;
             this.Comment.HeaderText = "Comment";
             this.Comment.MinimumWidth = 12;
             this.Comment.Name = "Comment";

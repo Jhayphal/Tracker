@@ -28,14 +28,6 @@ namespace Tracker
             {
                 await connection.OpenAsync(token);
 
-                using (var cmd = connection.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT COUNT(*) FROM [dbo].[Records]";
-                    cmd.CommandType = CommandType.Text;
-
-                    var result = await cmd.ExecuteScalarAsync();
-                }
-
                 using (var reader = await GetLoadCommand(connection).ExecuteReaderAsync(token))
                 {
                     while (await reader.ReadAsync(token))
@@ -52,7 +44,7 @@ namespace Tracker
 
                         rows.Add(record);
 
-                        //await Task.Delay(TimeSpan.FromSeconds(1), token);
+                        await Task.Delay(TimeSpan.FromSeconds(1), token);
                     }
                 }
             }
