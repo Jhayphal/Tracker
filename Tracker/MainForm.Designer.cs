@@ -28,36 +28,36 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tlpActions = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpContent = new System.Windows.Forms.TableLayoutPanel();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.dgvRecords = new System.Windows.Forms.DataGridView();
-            this.tlpActions.SuspendLayout();
+            this.tlpContent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecords)).BeginInit();
             this.SuspendLayout();
             // 
-            // tlpActions
+            // tlpContent
             // 
-            this.tlpActions.ColumnCount = 2;
-            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpActions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tlpActions.Controls.Add(this.btnAdd, 1, 0);
-            this.tlpActions.Controls.Add(this.btnEdit, 1, 1);
-            this.tlpActions.Controls.Add(this.btnRemove, 1, 2);
-            this.tlpActions.Controls.Add(this.dgvRecords, 0, 0);
-            this.tlpActions.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpActions.Location = new System.Drawing.Point(16, 16);
-            this.tlpActions.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
-            this.tlpActions.Name = "tlpActions";
-            this.tlpActions.RowCount = 3;
-            this.tlpActions.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpActions.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-            this.tlpActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-            this.tlpActions.Size = new System.Drawing.Size(2492, 1272);
-            this.tlpActions.TabIndex = 0;
+            this.tlpContent.ColumnCount = 2;
+            this.tlpContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tlpContent.Controls.Add(this.btnAdd, 1, 0);
+            this.tlpContent.Controls.Add(this.btnEdit, 1, 1);
+            this.tlpContent.Controls.Add(this.btnRemove, 1, 2);
+            this.tlpContent.Controls.Add(this.dgvRecords, 0, 0);
+            this.tlpContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpContent.Location = new System.Drawing.Point(16, 16);
+            this.tlpContent.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tlpContent.Name = "tlpContent";
+            this.tlpContent.RowCount = 3;
+            this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+            this.tlpContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+            this.tlpContent.Size = new System.Drawing.Size(2492, 1272);
+            this.tlpContent.TabIndex = 0;
             // 
             // btnAdd
             // 
@@ -102,7 +102,7 @@
             this.dgvRecords.Name = "dgvRecords";
             this.dgvRecords.ReadOnly = true;
             this.dgvRecords.RowHeadersWidth = 92;
-            this.tlpActions.SetRowSpan(this.dgvRecords, 3);
+            this.tlpContent.SetRowSpan(this.dgvRecords, 3);
             this.dgvRecords.RowTemplate.Height = 24;
             this.dgvRecords.Size = new System.Drawing.Size(2318, 1260);
             this.dgvRecords.TabIndex = 3;
@@ -112,7 +112,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2524, 1304);
-            this.Controls.Add(this.tlpActions);
+            this.Controls.Add(this.tlpContent);
             this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.MinimumSize = new System.Drawing.Size(1676, 848);
             this.Name = "MainForm";
@@ -120,8 +120,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tracker";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.tlpActions.ResumeLayout(false);
+            this.tlpContent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRecords)).EndInit();
             this.ResumeLayout(false);
 
@@ -129,7 +130,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TableLayoutPanel tlpActions;
+        private System.Windows.Forms.TableLayoutPanel tlpContent;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnRemove;

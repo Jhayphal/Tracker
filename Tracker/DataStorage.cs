@@ -18,23 +18,21 @@ namespace Tracker
             this.connectionString = connectionString;
         }
 
-        public async Task<IEnumerable<Record>> GetRecordsAsync(CancellationToken cancellation)
+        public async Task<IEnumerable<Record>> GetRecordsAsync(CancellationToken token)
         {
-            cancellation.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
 
             var rows = new List<Record>();
             
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                await connection.OpenAsync();
+                await connection.OpenAsync(token);
 
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                await Task.Delay(TimeSpan.FromSeconds(5), token);
 
-                cancellation.ThrowIfCancellationRequested();
+                var reader = await GetLoadCommand(connection).ExecuteReaderAsync(token);
 
-                var reader = await GetLoadCommand(connection).ExecuteReaderAsync();
-
-                while (await reader.ReadAsync())
+                while (await reader.ReadAsync(token))
                 {
                     var columnIndex = 0;
                     var record = new Record
@@ -47,8 +45,6 @@ namespace Tracker
                     };
 
                     rows.Add(record);
-
-                    cancellation.ThrowIfCancellationRequested();
                 }
             }
 
