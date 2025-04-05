@@ -5,8 +5,11 @@
 ) CREATE DATABASE [TrackerDataStorage]
 GO
 
---DROP TABLE IF EXISTS [dbo].[Records]
---GO
+USE [TrackerDataStorage]
+GO
+
+DROP TABLE IF EXISTS [dbo].[Records]
+GO
 
 IF OBJECT_ID(N'[dbo].[Records]', N'U') IS NULL
 BEGIN
@@ -18,10 +21,10 @@ BEGIN
         , [Comment] NVARCHAR(2048) NULL
     )
 
-    --INSERT INTO [dbo].[Records] ([CreatedAt], [Description], [Total])
-    --VALUES (GETDATE(), 'Some important operation', 123.44)
+    INSERT INTO [dbo].[Records] ([CreatedAt], [Description], [Total])
+    VALUES (GETDATE(), 'Some important operation', 123.44)
 END
 GO
 
---SELECT *
---FROM [dbo].[Records]
+SELECT [Id], [CreatedAt], [Description], [Total], [Comment]
+FROM [dbo].[Records]
