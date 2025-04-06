@@ -22,7 +22,7 @@ namespace Tracker
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            while (string.IsNullOrWhiteSpace(settings.ConnectionString))
+            if (string.IsNullOrWhiteSpace(settings.ConnectionString))
             {
                 TryUpdateSettings();
             }
@@ -41,6 +41,16 @@ namespace Tracker
             while (loading && triesCount-- > 0)
             {
                 Thread.Sleep(40);
+            }
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            if (TryUpdateSettings())
+            {
+                storage = new DataStorage(settings.ConnectionString);
+
+                RefreshData();
             }
         }
 
@@ -82,16 +92,6 @@ namespace Tracker
                 .ContinueWith(_ => EndLoading(), TaskContinuationOptions.ExecuteSynchronously);
         }
 
-        private void btnSettings_Click(object sender, EventArgs e)
-        {
-            if (TryUpdateSettings())
-            {
-                storage = new DataStorage(settings.ConnectionString);
-
-                RefreshData();
-            }
-        }
-
         private bool TryUpdateSettings()
         {
             BeginLoading();
@@ -101,7 +101,7 @@ namespace Tracker
                 var settingsForm = new SettingsForm(settings.ConnectionString);
                 if (settingsForm.ShowDialog(this) == DialogResult.OK)
                 {
-                    settings.ConnectionString = settingsForm.ConnectionStringBuilder.ToString();
+                    settings.ConnectionString = settingsForm.ConnectionString;
                     settings.Save();
 
                     return true;
