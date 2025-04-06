@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Linq;
 using System.Threading;
@@ -15,6 +16,7 @@ namespace Tracker
         private readonly Button[] actionButtons;
 
         private DataStorage storage;
+        private ObservableCollection<Record> records;
 
         private volatile bool loading;
 
@@ -84,6 +86,36 @@ namespace Tracker
             }
         }
 
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var currentRecord = records[dgvRecords.SelectedRows[0].Index];
+
+            using (var editor = new RecordEditorForm(currentRecord))
+            {
+                while (editor.ShowDialog(this) == DialogResult.OK)
+                {
+                    var modifiedRecord = new Record
+                    {
+                        Id = currentRecord.Id,
+                        Description = editor.Description,
+                        Total = editor.Total,
+                        Comment = editor.Comment
+                    };
+
+                    if (storage.TryUpdateRecord(modifiedRecord, out Exception exception))
+                    {
+                        RefreshData();
+
+                        break;
+                    }
+                    else
+                    {
+                        this.ShowError(exception);
+                    }
+                }
+            }
+        }
+
         private void btnSettings_Click(object sender, EventArgs e)
         {
             if (TryUpdateSettings())
@@ -116,12 +148,12 @@ namespace Tracker
         {
             BeginLoading();
 
-            dgvRecords.DataSource = new List<Record>();
+            SetRecords(Array.Empty<Record>());
 
             var refreshTask = storage.GetRecordsAsync(tokenSource.Token);
 
             var onSuccess = refreshTask.ContinueWith(
-                t => dgvRecords.DataSource = t.Result,
+                t => SetRecords(t.Result),
                 TaskContinuationOptions.ExecuteSynchronously | TaskContinuationOptions.OnlyOnRanToCompletion);
 
             var onCanceled = refreshTask.ContinueWith(
@@ -168,6 +200,11 @@ namespace Tracker
             {
                 button.Enabled = shouldBeEnabled;
             }
+        }
+
+        private void SetRecords(IEnumerable<Record> records)
+        {
+            dgvRecords.DataSource = this.records = new ObservableCollection<Record>(records);
         }
     }
 }

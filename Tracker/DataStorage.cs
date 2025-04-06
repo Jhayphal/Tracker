@@ -82,6 +82,48 @@ namespace Tracker
             }
         }
 
+        public bool TryUpdateRecord(Record newRecord, out Exception exception)
+        {
+            try
+            {
+                if (newRecord.Id < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(newRecord));
+                }
+
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (var createCommand = connection.CreateCommand())
+                    {
+                        createCommand.CommandType = CommandType.Text;
+                        createCommand.CommandText =
+                              "UPDATE [dbo].[Records]"
+                            + "SET [Description] = @Description"
+                            + ", [Total] = @Total"
+                            + ", [Comment] = @Comment "
+                            + "WHERE [Id] = @Id";
+
+                        createCommand.Parameters.AddWithValue("@Id", newRecord.Id);
+                        createCommand.Parameters.AddWithValue("@Description", newRecord.Description);
+                        createCommand.Parameters.AddWithValue("@Total", newRecord.Total);
+                        createCommand.Parameters.AddWithValue("@Comment", newRecord.Comment);
+
+                        createCommand.ExecuteNonQuery();
+                    }
+                }
+
+                exception = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+                return false;
+            }
+        }
+
         private SqlCommand GetLoadCommand(SqlConnection connection)
         {
             var loadCommand = connection.CreateCommand();
