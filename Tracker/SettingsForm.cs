@@ -5,21 +5,15 @@ namespace Tracker
 {
     public partial class SettingsForm : Form
     {
-        private readonly SqlConnectionStringBuilder connectionStringBuilder;
+        public SqlConnectionStringBuilder ConnectionStringBuilder { get; }
 
-        public SettingsForm()
+        public SettingsForm(string connectionString)
         {
             InitializeComponent();
 
-            connectionStringBuilder = new SqlConnectionStringBuilder(Properties.Settings.Default.ConnectionString);
+            ConnectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
 
-            pgConnectionSettings.SelectedObject = connectionStringBuilder;
-        }
-
-        private void btnOk_Click(object sender, System.EventArgs e)
-        {
-            Properties.Settings.Default.ConnectionString = connectionStringBuilder.ToString();
-            Properties.Settings.Default.Save();
+            pgConnectionSettings.SelectedObject = ConnectionStringBuilder;
         }
     }
 }

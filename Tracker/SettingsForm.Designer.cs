@@ -48,29 +48,32 @@
             this.tlpParameters.Controls.Add(this.btnCancel, 2, 1);
             this.tlpParameters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpParameters.Location = new System.Drawing.Point(0, 0);
+            this.tlpParameters.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tlpParameters.Name = "tlpParameters";
             this.tlpParameters.RowCount = 3;
             this.tlpParameters.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpParameters.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpParameters.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpParameters.Size = new System.Drawing.Size(992, 953);
+            this.tlpParameters.Size = new System.Drawing.Size(496, 492);
             this.tlpParameters.TabIndex = 0;
             // 
             // pgConnectionSettings
             // 
             this.tlpParameters.SetColumnSpan(this.pgConnectionSettings, 3);
             this.pgConnectionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pgConnectionSettings.Location = new System.Drawing.Point(3, 3);
+            this.pgConnectionSettings.Location = new System.Drawing.Point(2, 2);
+            this.pgConnectionSettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pgConnectionSettings.Name = "pgConnectionSettings";
-            this.pgConnectionSettings.Size = new System.Drawing.Size(986, 894);
+            this.pgConnectionSettings.Size = new System.Drawing.Size(492, 460);
             this.pgConnectionSettings.TabIndex = 0;
             // 
             // btnTestConnection
             // 
             this.btnTestConnection.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTestConnection.Location = new System.Drawing.Point(3, 903);
+            this.btnTestConnection.Location = new System.Drawing.Point(2, 466);
+            this.btnTestConnection.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnTestConnection.Name = "btnTestConnection";
-            this.btnTestConnection.Size = new System.Drawing.Size(324, 47);
+            this.btnTestConnection.Size = new System.Drawing.Size(161, 24);
             this.btnTestConnection.TabIndex = 1;
             this.btnTestConnection.Text = "Test Connection";
             this.btnTestConnection.UseVisualStyleBackColor = true;
@@ -79,33 +82,35 @@
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOk.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnOk.Location = new System.Drawing.Point(333, 903);
+            this.btnOk.Location = new System.Drawing.Point(167, 466);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(324, 47);
+            this.btnOk.Size = new System.Drawing.Size(161, 24);
             this.btnOk.TabIndex = 2;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCancel.Location = new System.Drawing.Point(663, 903);
+            this.btnCancel.Location = new System.Drawing.Point(332, 466);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(326, 47);
+            this.btnCancel.Size = new System.Drawing.Size(162, 24);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(992, 953);
+            this.ClientSize = new System.Drawing.Size(496, 492);
             this.Controls.Add(this.tlpParameters);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "SettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Application Settings";

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -7,6 +8,8 @@ namespace Tracker
 {
     public partial class MainForm : Form
     {
+        private readonly Properties.Settings settings = Properties.Settings.Default;
+
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private DataStorage storage;
 
@@ -18,7 +21,16 @@ namespace Tracker
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-            => RefreshData();
+        {
+            while (string.IsNullOrWhiteSpace(settings.ConnectionString))
+            {
+                TryUpdateSettings();
+            }
+
+            storage = new DataStorage(settings.ConnectionString);
+
+            RefreshData();
+        }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -38,13 +50,6 @@ namespace Tracker
             Cursor = Cursors.WaitCursor;
 
             tlpContent.Enabled = false;
-
-            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString))
-            {
-                new SettingsForm().ShowDialog(this);
-            }
-
-            storage = new DataStorage(Properties.Settings.Default.ConnectionString);
         }
 
         private void EndLoading()
@@ -75,6 +80,39 @@ namespace Tracker
 
             Task.WhenAny(onSuccess, onCanceled, onError)
                 .ContinueWith(_ => EndLoading(), TaskContinuationOptions.ExecuteSynchronously);
+        }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            if (TryUpdateSettings())
+            {
+                storage = new DataStorage(settings.ConnectionString);
+
+                RefreshData();
+            }
+        }
+
+        private bool TryUpdateSettings()
+        {
+            BeginLoading();
+
+            try
+            {
+                var settingsForm = new SettingsForm(settings.ConnectionString);
+                if (settingsForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    settings.ConnectionString = settingsForm.ConnectionStringBuilder.ToString();
+                    settings.Save();
+
+                    return true;
+                }
+
+                return false;
+            }
+            finally
+            {
+                EndLoading();
+            }
         }
     }
 }
