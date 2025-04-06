@@ -13,7 +13,6 @@ namespace Tracker
     {
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly Properties.Settings settings = Properties.Settings.Default;
-        private readonly Button[] actionButtons;
 
         private DataStorage storage;
         private ObservableCollection<Record> records;
@@ -23,11 +22,6 @@ namespace Tracker
         public MainForm()
         {
             InitializeComponent();
-
-            actionButtons = tlpContent.Controls
-                .OfType<Button>()
-                .Where(c => c != btnSettings)
-                .ToArray();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -116,6 +110,20 @@ namespace Tracker
             }
         }
 
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            var currentRecord = records[dgvRecords.SelectedRows[0].Index];
+
+            if (storage.TryRemoveRecord(currentRecord.Id, out Exception exception))
+            {
+                RefreshData();
+            }
+            else
+            {
+                this.ShowError(exception);
+            }
+        }
+
         private void btnSettings_Click(object sender, EventArgs e)
         {
             if (TryUpdateSettings())
@@ -195,10 +203,15 @@ namespace Tracker
 
         private void UpdateActionsState()
         {
-            var shouldBeEnabled = dgvRecords.SelectedRows.Count > 0;
-            foreach (var button in actionButtons)
+            if (dgvRecords.SelectedRows.Count > 0)
             {
-                button.Enabled = shouldBeEnabled;
+                btnEdit.Enabled = true;
+                btnRemove.Enabled = true;
+            }
+            else
+            {
+                btnEdit.Enabled = false;
+                btnRemove.Enabled = false;
             }
         }
 

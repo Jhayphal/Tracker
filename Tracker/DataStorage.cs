@@ -34,7 +34,7 @@ namespace Tracker
                         var record = new Record
                         {
                             Id = reader.GetInt64(columnIndex++),
-                            CreatedAt = reader.GetDateTime(columnIndex++),
+                            CreatedAt = reader.GetDateTime(columnIndex++).ToLocalTime(),
                             Description = reader.GetString(columnIndex++),
                             Total = reader.GetDecimal(columnIndex++),
                             Comment = SafeGetSqlString(reader, columnIndex++)
@@ -110,7 +110,47 @@ namespace Tracker
                         createCommand.Parameters.AddWithValue("@Total", newRecord.Total);
                         createCommand.Parameters.AddWithValue("@Comment", newRecord.Comment);
 
-                        createCommand.ExecuteNonQuery();
+                        if (createCommand.ExecuteNonQuery() == 0)
+                        {
+                            throw new ArgumentOutOfRangeException(nameof(newRecord), $"Record with Id = {newRecord.Id} does not exists.");
+                        }
+                    }
+                }
+
+                exception = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+                return false;
+            }
+        }
+
+        public bool TryRemoveRecord(long id, out Exception exception)
+        {
+            try
+            {
+                if (id < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(id));
+                }
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (var removeCommand = connection.CreateCommand())
+                    {
+                        removeCommand.CommandType = CommandType.Text;
+                        removeCommand.CommandText = "DELETE FROM [dbo].[Records] WHERE [Id] = @Id";
+                        
+                        removeCommand.Parameters.AddWithValue("@Id", id);
+
+                        if (removeCommand.ExecuteNonQuery() == 0)
+                        {
+                            throw new ArgumentOutOfRangeException(nameof(id), $"Record with Id = {id} does not exists.");
+                        }
                     }
                 }
 
