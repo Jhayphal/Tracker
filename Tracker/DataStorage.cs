@@ -43,8 +43,6 @@ namespace Tracker
                         };
 
                         rows.Add(record);
-
-                        await Task.Delay(TimeSpan.FromSeconds(1), token);
                     }
                 }
             }

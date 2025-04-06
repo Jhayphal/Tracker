@@ -8,7 +8,7 @@ namespace Tracker
     public partial class MainForm : Form
     {
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private readonly DataStorage storage = new DataStorage(@"Server=(localdb)\MSSQLLocalDB;Database=TrackerDataStorage;Integrated Security=true;");
+        private DataStorage storage;
 
         private volatile bool loading;
 
@@ -38,6 +38,13 @@ namespace Tracker
             Cursor = Cursors.WaitCursor;
 
             tlpContent.Enabled = false;
+
+            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.ConnectionString))
+            {
+                new SettingsForm().ShowDialog(this);
+            }
+
+            storage = new DataStorage(Properties.Settings.Default.ConnectionString);
         }
 
         private void EndLoading()
