@@ -57,6 +57,11 @@ namespace Tracker
             UpdateActionsState();
         }
 
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            new RecordEditorForm().ShowDialog(this);
+        }
+
         private void btnSettings_Click(object sender, EventArgs e)
         {
             if (TryUpdateSettings())
