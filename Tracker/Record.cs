@@ -2,7 +2,7 @@
 
 namespace Tracker
 {
-    internal sealed class Record
+    public sealed class Record
     {
         public long Id { get; set; }
 

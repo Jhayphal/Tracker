@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Tracker
 {
@@ -16,5 +8,23 @@ namespace Tracker
         {
             InitializeComponent();
         }
+
+        public RecordEditorForm(Record record)
+        {
+            InitializeComponent();
+
+            tbDescription.Text = record.Description;
+            nudTotal.Value = record.Total;
+            tbComment.Text = record.Comment;
+        }
+
+        public string Description
+            => tbDescription.Text;
+
+        public decimal Total
+            => nudTotal.Value;
+
+        public string Comment
+            => tbComment.Text;
     }
 }

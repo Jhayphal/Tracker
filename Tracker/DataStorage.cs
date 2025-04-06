@@ -11,8 +11,6 @@ namespace Tracker
     {
         private readonly string connectionString;
 
-        private SqlCommand loadCommand;
-
         public DataStorage(string connectionString)
         {
             this.connectionString = connectionString;
@@ -50,20 +48,50 @@ namespace Tracker
             return rows;
         }
 
+        public bool TryCreateRecord(Record newRecord, out Exception exception)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (var createCommand = connection.CreateCommand())
+                    {
+                        createCommand.CommandType = CommandType.Text;
+                        createCommand.CommandText = 
+                              "INSERT INTO [dbo].[Records] ([CreatedAt], [Description], [Total], [Comment]) "
+                            + "VALUES (@CreatedAt, @Description, @Total, @Comment)";
+
+                        createCommand.Parameters.AddWithValue("@CreatedAt", DateTime.UtcNow);
+                        createCommand.Parameters.AddWithValue("@Description", newRecord.Description);
+                        createCommand.Parameters.AddWithValue("@Total", newRecord.Total);
+                        createCommand.Parameters.AddWithValue("@Comment", newRecord.Comment);
+
+                        createCommand.ExecuteNonQuery();
+                    }
+                }
+
+                exception = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+                return false;
+            }
+        }
+
         private SqlCommand GetLoadCommand(SqlConnection connection)
         {
-            if (loadCommand is null)
-            {
-                loadCommand = connection.CreateCommand();
-                loadCommand.CommandText = "SELECT [Id]" +
-                    ", [CreatedAt]" +
-                    ", [Description]" +
-                    ", [Total]" +
-                    ", [Comment] " +
-                    "FROM [dbo].[Records]";
-                loadCommand.CommandType = CommandType.Text;
-                loadCommand.Prepare();
-            }
+            var loadCommand = connection.CreateCommand();
+            loadCommand.CommandText = "SELECT [Id]"
+                + ", [CreatedAt]"
+                + ", [Description]"
+                + ", [Total]"
+                + ", [Comment] "
+                + "FROM [dbo].[Records]";
+            loadCommand.CommandType = CommandType.Text;
 
             return loadCommand;
         }

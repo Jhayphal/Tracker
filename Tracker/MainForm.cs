@@ -59,7 +59,29 @@ namespace Tracker
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            new RecordEditorForm().ShowDialog(this);
+            using (var editor = new RecordEditorForm())
+            {
+                while (editor.ShowDialog(this) == DialogResult.OK)
+                {
+                    var newRecord = new Record
+                    {
+                        Description = editor.Description,
+                        Total = editor.Total,
+                        Comment = editor.Comment
+                    };
+
+                    if (storage.TryCreateRecord(newRecord, out var exception))
+                    {
+                        RefreshData();
+
+                        break;
+                    }
+                    else
+                    {
+                        this.ShowError(exception);
+                    }
+                }
+            }
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
@@ -120,13 +142,15 @@ namespace Tracker
 
             try
             {
-                var settingsForm = new SettingsForm(settings.ConnectionString);
-                if (settingsForm.ShowDialog(this) == DialogResult.OK)
+                using (var settingsForm = new SettingsForm(settings.ConnectionString))
                 {
-                    settings.ConnectionString = settingsForm.ConnectionString;
-                    settings.Save();
+                    if (settingsForm.ShowDialog(this) == DialogResult.OK)
+                    {
+                        settings.ConnectionString = settingsForm.ConnectionString;
+                        settings.Save();
 
-                    return true;
+                        return true;
+                    }
                 }
 
                 return false;

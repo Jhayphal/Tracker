@@ -34,12 +34,12 @@
             this.lComment = new System.Windows.Forms.Label();
             this.tbDescription = new System.Windows.Forms.TextBox();
             this.tbComment = new System.Windows.Forms.TextBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.nudTotal = new System.Windows.Forms.NumericUpDown();
             this.flpActions = new System.Windows.Forms.FlowLayoutPanel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
             this.tlpMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotal)).BeginInit();
             this.flpActions.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +53,7 @@
             this.tlpMain.Controls.Add(this.lComment, 0, 2);
             this.tlpMain.Controls.Add(this.tbDescription, 1, 0);
             this.tlpMain.Controls.Add(this.tbComment, 1, 2);
-            this.tlpMain.Controls.Add(this.numericUpDown1, 1, 1);
+            this.tlpMain.Controls.Add(this.nudTotal, 1, 1);
             this.tlpMain.Controls.Add(this.flpActions, 0, 3);
             this.tlpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMain.Location = new System.Drawing.Point(8, 8);
@@ -78,7 +78,7 @@
             // lTotal
             // 
             this.lTotal.AutoSize = true;
-            this.lTotal.Location = new System.Drawing.Point(3, 215);
+            this.lTotal.Location = new System.Drawing.Point(3, 214);
             this.lTotal.Name = "lTotal";
             this.lTotal.Size = new System.Drawing.Size(38, 16);
             this.lTotal.TabIndex = 1;
@@ -87,7 +87,7 @@
             // lComment
             // 
             this.lComment.AutoSize = true;
-            this.lComment.Location = new System.Drawing.Point(3, 243);
+            this.lComment.Location = new System.Drawing.Point(3, 242);
             this.lComment.Name = "lComment";
             this.lComment.Size = new System.Drawing.Size(64, 16);
             this.lComment.TabIndex = 2;
@@ -99,32 +99,32 @@
             this.tbDescription.Location = new System.Drawing.Point(84, 3);
             this.tbDescription.Multiline = true;
             this.tbDescription.Name = "tbDescription";
-            this.tbDescription.Size = new System.Drawing.Size(353, 209);
+            this.tbDescription.Size = new System.Drawing.Size(353, 208);
             this.tbDescription.TabIndex = 3;
             // 
             // tbComment
             // 
             this.tbComment.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbComment.Location = new System.Drawing.Point(84, 246);
+            this.tbComment.Location = new System.Drawing.Point(84, 245);
             this.tbComment.Multiline = true;
             this.tbComment.Name = "tbComment";
             this.tbComment.Size = new System.Drawing.Size(353, 209);
             this.tbComment.TabIndex = 4;
             // 
-            // numericUpDown1
+            // nudTotal
             // 
-            this.numericUpDown1.DecimalPlaces = 2;
-            this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown1.Location = new System.Drawing.Point(84, 218);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
+            this.nudTotal.DecimalPlaces = 2;
+            this.nudTotal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudTotal.Location = new System.Drawing.Point(84, 217);
+            this.nudTotal.Maximum = new decimal(new int[] {
             1410065407,
             2,
             0,
             0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(353, 22);
-            this.numericUpDown1.TabIndex = 5;
-            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudTotal.Name = "nudTotal";
+            this.nudTotal.Size = new System.Drawing.Size(353, 22);
+            this.nudTotal.TabIndex = 5;
+            this.nudTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // flpActions
             // 
@@ -133,9 +133,9 @@
             this.flpActions.Controls.Add(this.btnOk);
             this.flpActions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpActions.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flpActions.Location = new System.Drawing.Point(3, 461);
+            this.flpActions.Location = new System.Drawing.Point(3, 460);
             this.flpActions.Name = "flpActions";
-            this.flpActions.Size = new System.Drawing.Size(434, 30);
+            this.flpActions.Size = new System.Drawing.Size(434, 31);
             this.flpActions.TabIndex = 6;
             // 
             // btnCancel
@@ -172,7 +172,7 @@
             this.Text = "Record Editor";
             this.tlpMain.ResumeLayout(false);
             this.tlpMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTotal)).EndInit();
             this.flpActions.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -186,7 +186,7 @@
         private System.Windows.Forms.Label lComment;
         private System.Windows.Forms.TextBox tbDescription;
         private System.Windows.Forms.TextBox tbComment;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown nudTotal;
         private System.Windows.Forms.FlowLayoutPanel flpActions;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOk;
