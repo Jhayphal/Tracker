@@ -8,9 +8,9 @@ namespace Tracker
 {
     public partial class MainForm : Form
     {
+        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly Properties.Settings settings = Properties.Settings.Default;
 
-        private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private DataStorage storage;
 
         private volatile bool loading;
@@ -73,6 +73,8 @@ namespace Tracker
         private void RefreshData()
         {
             BeginLoading();
+
+            dgvRecords.DataSource = null;
 
             var refreshTask = storage.GetRecordsAsync(tokenSource.Token);
 
