@@ -132,6 +132,7 @@
             this.dgvRecords.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRecords.Size = new System.Drawing.Size(859, 584);
             this.dgvRecords.TabIndex = 3;
+            this.dgvRecords.SelectionChanged += new System.EventHandler(this.dgvRecords_SelectionChanged);
             // 
             // Id
             // 

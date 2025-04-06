@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -10,6 +12,7 @@ namespace Tracker
     {
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly Properties.Settings settings = Properties.Settings.Default;
+        private readonly Button[] actionButtons;
 
         private DataStorage storage;
 
@@ -18,6 +21,11 @@ namespace Tracker
         public MainForm()
         {
             InitializeComponent();
+
+            actionButtons = tlpContent.Controls
+                .OfType<Button>()
+                .Where(c => c != btnSettings)
+                .ToArray();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -44,6 +52,11 @@ namespace Tracker
             }
         }
 
+        private void dgvRecords_SelectionChanged(object sender, EventArgs e)
+        {
+            UpdateActionsState();
+        }
+
         private void btnSettings_Click(object sender, EventArgs e)
         {
             if (TryUpdateSettings())
@@ -68,13 +81,15 @@ namespace Tracker
 
             Cursor = Cursors.Default;
             loading = false;
+
+            UpdateActionsState();
         }
 
         private void RefreshData()
         {
             BeginLoading();
 
-            dgvRecords.DataSource = null;
+            dgvRecords.DataSource = new List<Record>();
 
             var refreshTask = storage.GetRecordsAsync(tokenSource.Token);
 
@@ -114,6 +129,15 @@ namespace Tracker
             finally
             {
                 EndLoading();
+            }
+        }
+
+        private void UpdateActionsState()
+        {
+            var shouldBeEnabled = dgvRecords.SelectedRows.Count > 0;
+            foreach (var button in actionButtons)
+            {
+                button.Enabled = shouldBeEnabled;
             }
         }
     }
