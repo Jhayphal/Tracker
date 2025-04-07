@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,11 +10,19 @@ namespace Tracker
 {
     internal sealed class DataStorage
     {
-        private readonly string connectionString;
+        private const string DefaultDatabaseName = "Tracker";
+        private const string RecordsTableName = "Records";
+        
+        private readonly SqlConnectionStringBuilder connectionStringBuilder;
 
         public DataStorage(string connectionString)
         {
-            this.connectionString = connectionString;
+            connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+
+            if (string.IsNullOrWhiteSpace(connectionStringBuilder.InitialCatalog))
+            {
+                connectionStringBuilder.InitialCatalog = DefaultDatabaseName;
+            }
         }
 
         public async Task<IEnumerable<Record>> GetRecordsAsync(CancellationToken token)
@@ -22,10 +31,8 @@ namespace Tracker
 
             var rows = new List<Record>();
             
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = GetAndOpenConnection())
             {
-                await connection.OpenAsync(token);
-
                 using (var reader = await GetLoadCommand(connection).ExecuteReaderAsync(token))
                 {
                     while (await reader.ReadAsync(token))
@@ -52,15 +59,12 @@ namespace Tracker
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = GetAndOpenConnection())
                 {
-                    connection.Open();
-
                     using (var createCommand = connection.CreateCommand())
                     {
-                        createCommand.CommandType = CommandType.Text;
-                        createCommand.CommandText = 
-                              "INSERT INTO [dbo].[Records] ([CreatedAt], [Description], [Total], [Comment]) "
+                        createCommand.CommandText =
+                              $"INSERT INTO [dbo].[{RecordsTableName}] ([CreatedAt], [Description], [Total], [Comment]) "
                             + "VALUES (@CreatedAt, @Description, @Total, @Comment)";
 
                         createCommand.Parameters.AddWithValue("@CreatedAt", DateTime.UtcNow);
@@ -91,15 +95,12 @@ namespace Tracker
                     throw new ArgumentOutOfRangeException(nameof(newRecord));
                 }
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = GetAndOpenConnection())
                 {
-                    connection.Open();
-
                     using (var createCommand = connection.CreateCommand())
                     {
-                        createCommand.CommandType = CommandType.Text;
                         createCommand.CommandText =
-                              "UPDATE [dbo].[Records]"
+                              $"UPDATE [dbo].[{RecordsTableName}]"
                             + "SET [Description] = @Description"
                             + ", [Total] = @Total"
                             + ", [Comment] = @Comment "
@@ -136,14 +137,11 @@ namespace Tracker
                     throw new ArgumentOutOfRangeException(nameof(id));
                 }
 
-                using (var connection = new SqlConnection(connectionString))
+                using (var connection = GetAndOpenConnection())
                 {
-                    connection.Open();
-
                     using (var removeCommand = connection.CreateCommand())
                     {
-                        removeCommand.CommandType = CommandType.Text;
-                        removeCommand.CommandText = "DELETE FROM [dbo].[Records] WHERE [Id] = @Id";
+                        removeCommand.CommandText = $"DELETE FROM [dbo].[{RecordsTableName}] WHERE [Id] = @Id";
                         
                         removeCommand.Parameters.AddWithValue("@Id", id);
 
@@ -161,6 +159,61 @@ namespace Tracker
             {
                 exception = ex;
                 return false;
+            }
+        }
+
+        private SqlConnection GetAndOpenConnection()
+        {
+            var connection = new SqlConnection(connectionStringBuilder.ConnectionString);
+            
+            try
+            {
+                connection.Open();
+            }
+            catch (SqlException ex) when (ex.Class == 11)
+            {
+                CreateDatabase();
+
+                connection = new SqlConnection(connectionStringBuilder.ConnectionString);
+                connection.Open();
+            }
+
+            CreateRecordsTableIfRequired(connection);
+
+            return connection;
+        }
+
+        private void CreateDatabase()
+        {
+            var databaseName = new SqlCommandBuilder().QuoteIdentifier(connectionStringBuilder.InitialCatalog);
+            connectionStringBuilder.InitialCatalog = string.Empty;
+
+            using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+            {
+                connection.Open();
+
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = $"CREATE DATABASE {databaseName}";
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void CreateRecordsTableIfRequired(SqlConnection connection)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = $"IF OBJECT_ID(N'[dbo].[{RecordsTableName}]', N'U') IS NULL " +
+                    $"CREATE TABLE [dbo].[{RecordsTableName}] (" +
+                    "[Id] BIGINT IDENTITY PRIMARY KEY NOT NULL, " +
+                    "[CreatedAt] DATETIME NOT NULL, " +
+                    "[Description] NVARCHAR(256) NOT NULL, " +
+                    "[Total] DECIMAL(18, 4) NOT NULL, " +
+                    "[Comment] NVARCHAR(2048) NULL)";
+
+                command.ExecuteNonQuery();
             }
         }
 
