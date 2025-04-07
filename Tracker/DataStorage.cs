@@ -11,7 +11,7 @@ namespace Tracker
     internal sealed class DataStorage
     {
         private const string DefaultDatabaseName = "Tracker";
-        private const string RecordsTableName = "Records";
+        private const string RecordsTableName = "[dbo].[Records]";
         
         private readonly SqlConnectionStringBuilder connectionStringBuilder;
 
@@ -31,23 +31,30 @@ namespace Tracker
 
             var rows = new List<Record>();
             
-            using (SqlConnection connection = GetAndOpenConnection())
+            using (SqlConnection connection = GetOpenedConnection())
             {
-                using (var reader = await GetLoadCommand(connection).ExecuteReaderAsync(token))
+                using (var command = connection.CreateCommand())
                 {
-                    while (await reader.ReadAsync(token))
-                    {
-                        var columnIndex = 0;
-                        var record = new Record
-                        {
-                            Id = reader.GetInt64(columnIndex++),
-                            CreatedAt = reader.GetDateTime(columnIndex++).ToLocalTime(),
-                            Description = reader.GetString(columnIndex++),
-                            Total = reader.GetDecimal(columnIndex++),
-                            Comment = SafeGetSqlString(reader, columnIndex++)
-                        };
+                    command.CommandText = 
+                         "SELECT [Id], [CreatedAt], [Description], [Total], [Comment] " +
+                        $"FROM {RecordsTableName}";
 
-                        rows.Add(record);
+                    using (var reader = await command.ExecuteReaderAsync(token))
+                    {
+                        while (await reader.ReadAsync(token))
+                        {
+                            var columnIndex = 0;
+                            var record = new Record
+                            {
+                                Id = reader.GetInt64(columnIndex++),
+                                CreatedAt = reader.GetDateTime(columnIndex++).ToLocalTime(),
+                                Description = reader.GetString(columnIndex++),
+                                Total = reader.GetDecimal(columnIndex++),
+                                Comment = GetNullableString(reader, columnIndex++)
+                            };
+
+                            rows.Add(record);
+                        }
                     }
                 }
             }
@@ -59,12 +66,12 @@ namespace Tracker
         {
             try
             {
-                using (SqlConnection connection = GetAndOpenConnection())
+                using (SqlConnection connection = GetOpenedConnection())
                 {
                     using (var createCommand = connection.CreateCommand())
                     {
                         createCommand.CommandText =
-                              $"INSERT INTO [dbo].[{RecordsTableName}] ([CreatedAt], [Description], [Total], [Comment]) "
+                             $"INSERT INTO {RecordsTableName} ([CreatedAt], [Description], [Total], [Comment]) "
                             + "VALUES (@CreatedAt, @Description, @Total, @Comment)";
 
                         createCommand.Parameters.AddWithValue("@CreatedAt", DateTime.UtcNow);
@@ -95,15 +102,15 @@ namespace Tracker
                     throw new ArgumentOutOfRangeException(nameof(newRecord));
                 }
 
-                using (SqlConnection connection = GetAndOpenConnection())
+                using (SqlConnection connection = GetOpenedConnection())
                 {
                     using (var createCommand = connection.CreateCommand())
                     {
                         createCommand.CommandText =
-                              $"UPDATE [dbo].[{RecordsTableName}]"
-                            + "SET [Description] = @Description"
-                            + ", [Total] = @Total"
-                            + ", [Comment] = @Comment "
+                             $"UPDATE {RecordsTableName}"
+                            + "SET [Description] = @Description, "
+                                + "[Total] = @Total, "
+                                + "[Comment] = @Comment "
                             + "WHERE [Id] = @Id";
 
                         createCommand.Parameters.AddWithValue("@Id", newRecord.Id);
@@ -137,11 +144,13 @@ namespace Tracker
                     throw new ArgumentOutOfRangeException(nameof(id));
                 }
 
-                using (var connection = GetAndOpenConnection())
+                using (var connection = GetOpenedConnection())
                 {
                     using (var removeCommand = connection.CreateCommand())
                     {
-                        removeCommand.CommandText = $"DELETE FROM [dbo].[{RecordsTableName}] WHERE [Id] = @Id";
+                        removeCommand.CommandText = 
+                            $"DELETE FROM {RecordsTableName} " +
+                             "WHERE [Id] = @Id";
                         
                         removeCommand.Parameters.AddWithValue("@Id", id);
 
@@ -162,7 +171,7 @@ namespace Tracker
             }
         }
 
-        private SqlConnection GetAndOpenConnection()
+        private SqlConnection GetOpenedConnection()
         {
             var connection = new SqlConnection(connectionStringBuilder.ConnectionString);
             
@@ -172,10 +181,7 @@ namespace Tracker
             }
             catch (SqlException ex) when (ex.Class == 11)
             {
-                CreateDatabase();
-
-                connection = new SqlConnection(connectionStringBuilder.ConnectionString);
-                connection.Open();
+                connection = CreateDatabase();
             }
 
             CreateRecordsTableIfRequired(connection);
@@ -183,55 +189,47 @@ namespace Tracker
             return connection;
         }
 
-        private void CreateDatabase()
+        private SqlConnection CreateDatabase()
         {
             var databaseName = new SqlCommandBuilder().QuoteIdentifier(connectionStringBuilder.InitialCatalog);
-            connectionStringBuilder.InitialCatalog = string.Empty;
-
-            using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+            var rootConnectionStringBuilder = new SqlConnectionStringBuilder(connectionStringBuilder.ConnectionString)
             {
-                connection.Open();
+                InitialCatalog = string.Empty
+            };
 
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = $"CREATE DATABASE {databaseName}";
+            var connection = new SqlConnection(rootConnectionStringBuilder.ConnectionString);
+            connection.Open();
 
-                    command.ExecuteNonQuery();
-                }
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = $"CREATE DATABASE {databaseName}";
+
+                command.ExecuteNonQuery();
             }
+
+            connection.ChangeDatabase(connectionStringBuilder.InitialCatalog);
+            return connection;
         }
 
         private void CreateRecordsTableIfRequired(SqlConnection connection)
         {
             using (var command = connection.CreateCommand())
             {
-                command.CommandText = $"IF OBJECT_ID(N'[dbo].[{RecordsTableName}]', N'U') IS NULL " +
-                    $"CREATE TABLE [dbo].[{RecordsTableName}] (" +
-                    "[Id] BIGINT IDENTITY PRIMARY KEY NOT NULL, " +
-                    "[CreatedAt] DATETIME NOT NULL, " +
-                    "[Description] NVARCHAR(256) NOT NULL, " +
-                    "[Total] DECIMAL(18, 4) NOT NULL, " +
-                    "[Comment] NVARCHAR(2048) NULL)";
+                command.CommandText = 
+                    $"IF OBJECT_ID(N'{RecordsTableName}', N'U') IS NULL "
+                        + $"CREATE TABLE {RecordsTableName} ("
+                            + "[Id] BIGINT IDENTITY PRIMARY KEY NOT NULL, "
+                            + "[CreatedAt] DATETIME NOT NULL, "
+                            + "[Description] NVARCHAR(256) NOT NULL, "
+                            + "[Total] DECIMAL(18, 4) NOT NULL, "
+                            + "[Comment] NVARCHAR(2048) NULL" +
+                        ")";
 
                 command.ExecuteNonQuery();
             }
         }
 
-        private SqlCommand GetLoadCommand(SqlConnection connection)
-        {
-            var loadCommand = connection.CreateCommand();
-            loadCommand.CommandText = "SELECT [Id]"
-                + ", [CreatedAt]"
-                + ", [Description]"
-                + ", [Total]"
-                + ", [Comment] "
-                + "FROM [dbo].[Records]";
-            loadCommand.CommandType = CommandType.Text;
-
-            return loadCommand;
-        }
-
-        private static string SafeGetSqlString(SqlDataReader dataReader, int index)
+        private static string GetNullableString(SqlDataReader dataReader, int index)
         {
             var value = dataReader.GetSqlString(index);
             if (value.IsNull)

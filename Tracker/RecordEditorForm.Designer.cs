@@ -81,7 +81,7 @@
             this.lTotal.Location = new System.Drawing.Point(3, 214);
             this.lTotal.Name = "lTotal";
             this.lTotal.Size = new System.Drawing.Size(38, 16);
-            this.lTotal.TabIndex = 1;
+            this.lTotal.TabIndex = 2;
             this.lTotal.Text = "Total";
             // 
             // lComment
@@ -90,26 +90,28 @@
             this.lComment.Location = new System.Drawing.Point(3, 242);
             this.lComment.Name = "lComment";
             this.lComment.Size = new System.Drawing.Size(64, 16);
-            this.lComment.TabIndex = 2;
+            this.lComment.TabIndex = 4;
             this.lComment.Text = "Comment";
             // 
             // tbDescription
             // 
             this.tbDescription.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbDescription.Location = new System.Drawing.Point(84, 3);
+            this.tbDescription.MaxLength = 256;
             this.tbDescription.Multiline = true;
             this.tbDescription.Name = "tbDescription";
             this.tbDescription.Size = new System.Drawing.Size(353, 208);
-            this.tbDescription.TabIndex = 3;
+            this.tbDescription.TabIndex = 1;
             // 
             // tbComment
             // 
             this.tbComment.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbComment.Location = new System.Drawing.Point(84, 245);
+            this.tbComment.MaxLength = 2048;
             this.tbComment.Multiline = true;
             this.tbComment.Name = "tbComment";
-            this.tbComment.Size = new System.Drawing.Size(353, 209);
-            this.tbComment.TabIndex = 4;
+            this.tbComment.Size = new System.Drawing.Size(353, 208);
+            this.tbComment.TabIndex = 5;
             // 
             // nudTotal
             // 
@@ -123,7 +125,7 @@
             0});
             this.nudTotal.Name = "nudTotal";
             this.nudTotal.Size = new System.Drawing.Size(353, 22);
-            this.nudTotal.TabIndex = 5;
+            this.nudTotal.TabIndex = 3;
             this.nudTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // flpActions
@@ -133,9 +135,9 @@
             this.flpActions.Controls.Add(this.btnOk);
             this.flpActions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpActions.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flpActions.Location = new System.Drawing.Point(3, 460);
+            this.flpActions.Location = new System.Drawing.Point(3, 459);
             this.flpActions.Name = "flpActions";
-            this.flpActions.Size = new System.Drawing.Size(434, 31);
+            this.flpActions.Size = new System.Drawing.Size(434, 32);
             this.flpActions.TabIndex = 6;
             // 
             // btnCancel
@@ -144,7 +146,7 @@
             this.btnCancel.Location = new System.Drawing.Point(356, 3);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 0;
+            this.btnCancel.TabIndex = 1;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
@@ -154,7 +156,7 @@
             this.btnOk.Location = new System.Drawing.Point(275, 3);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
-            this.btnOk.TabIndex = 1;
+            this.btnOk.TabIndex = 0;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
             // 
@@ -164,7 +166,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(456, 510);
             this.Controls.Add(this.tlpMain);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(200, 300);
             this.Name = "RecordEditorForm";
             this.Padding = new System.Windows.Forms.Padding(8);
