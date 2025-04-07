@@ -22,13 +22,18 @@ namespace Tracker
 
         private void btnTestConnection_Click(object sender, EventArgs e)
         {
-            if (ConnectionUtils.TryConnect(connectionStringBuilder.ConnectionString, out var exception))
+            try
             {
+                using (SqlConnection connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+                {
+                    connection.Open();
+                }
+
                 this.ShowInformation("Connection established.", "Success");
             }
-            else
+            catch (Exception ex)
             {
-                this.ShowError(exception, "Failure");
+                this.ShowError(ex, "Failure");
             }
         }
     }
