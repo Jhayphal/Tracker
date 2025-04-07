@@ -6,16 +6,18 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Tracker.Database.Models;
+
 namespace Tracker
 {
-    internal sealed class DataStorage
+    internal sealed class Storage
     {
         private const string DefaultDatabaseName = "Tracker";
         private const string RecordsTableName = "[dbo].[Records]";
         
         private readonly SqlConnectionStringBuilder connectionStringBuilder;
 
-        public DataStorage(string connectionString)
+        public Storage(string connectionString)
         {
             connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
 

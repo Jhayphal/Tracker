@@ -1,4 +1,4 @@
-﻿namespace Tracker
+﻿namespace Tracker.Forms
 {
     partial class RecordEditorForm
     {

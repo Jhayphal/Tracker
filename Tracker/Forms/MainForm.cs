@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Tracker
+using Tracker.Database.Models;
+using Tracker.Extensions;
+
+namespace Tracker.Forms
 {
     public partial class MainForm : Form
     {
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly Properties.Settings settings = Properties.Settings.Default;
 
-        private DataStorage storage;
+        private Storage storage;
         private ObservableCollection<Record> records;
 
         private volatile bool loading;
@@ -31,7 +32,7 @@ namespace Tracker
                 TryUpdateSettings();
             }
 
-            storage = new DataStorage(settings.ConnectionString);
+            storage = new Storage(settings.ConnectionString);
 
             RefreshData();
         }
@@ -128,7 +129,7 @@ namespace Tracker
         {
             if (TryUpdateSettings())
             {
-                storage = new DataStorage(settings.ConnectionString);
+                storage = new Storage(settings.ConnectionString);
 
                 RefreshData();
             }

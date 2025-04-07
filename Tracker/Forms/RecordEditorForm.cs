@@ -1,6 +1,8 @@
 ﻿using System.Windows.Forms;
 
-namespace Tracker
+using Tracker.Database.Models;
+
+namespace Tracker.Forms
 {
     public partial class RecordEditorForm : Form
     {

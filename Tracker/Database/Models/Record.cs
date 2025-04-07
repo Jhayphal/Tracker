@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tracker
+namespace Tracker.Database.Models
 {
     public sealed class Record
     {

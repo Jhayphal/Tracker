@@ -2,7 +2,9 @@
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace Tracker
+using Tracker.Extensions;
+
+namespace Tracker.Forms
 {
     public partial class SettingsForm : Form
     {
