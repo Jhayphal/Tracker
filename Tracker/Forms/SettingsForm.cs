@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Data.SqlClient;
-using System.Windows.Forms;
 
 using Tracker.Extensions;
 
 namespace Tracker.Forms
 {
-    public partial class SettingsForm : Form
+    public partial class SettingsForm : ScalableForm
     {
         private readonly SqlConnectionStringBuilder connectionStringBuilder;
 
@@ -26,7 +25,7 @@ namespace Tracker.Forms
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+                using (var connection = new SqlConnection(connectionStringBuilder.ConnectionString))
                 {
                     connection.Open();
                 }

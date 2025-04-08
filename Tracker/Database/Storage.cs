@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,7 +31,7 @@ namespace Tracker
 
             var rows = new List<Record>();
             
-            using (SqlConnection connection = GetOpenedConnection())
+            using (var connection = GetOpenedConnection())
             {
                 using (var command = connection.CreateCommand())
                 {
@@ -68,7 +66,7 @@ namespace Tracker
         {
             try
             {
-                using (SqlConnection connection = GetOpenedConnection())
+                using (var connection = GetOpenedConnection())
                 {
                     using (var createCommand = connection.CreateCommand())
                     {
@@ -104,7 +102,7 @@ namespace Tracker
                     throw new ArgumentOutOfRangeException(nameof(newRecord));
                 }
 
-                using (SqlConnection connection = GetOpenedConnection())
+                using (var connection = GetOpenedConnection())
                 {
                     using (var createCommand = connection.CreateCommand())
                     {

@@ -10,7 +10,7 @@ using Tracker.Extensions;
 
 namespace Tracker.Forms
 {
-    public partial class MainForm : Form
+    public partial class MainForm : ScalableForm
     {
         private readonly CancellationTokenSource tokenSource = new CancellationTokenSource();
         private readonly Properties.Settings settings = Properties.Settings.Default;
