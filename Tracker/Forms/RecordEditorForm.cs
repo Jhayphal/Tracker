@@ -4,7 +4,7 @@ using Tracker.Database.Models;
 
 namespace Tracker.Forms
 {
-    public partial class RecordEditorForm : Form
+    public partial class RecordEditorForm : ScalableForm
     {
         public RecordEditorForm()
         {
